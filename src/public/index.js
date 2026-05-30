@@ -31,6 +31,12 @@ s.onupdate=function(data){ //callback to update data in UI
     I("ulText").textContent=(data.testState==3&&data.ulStatus==0)?"...":data.ulStatus;
     I("pingText").textContent=data.pingStatus;
     I("jitText").textContent=data.jitterStatus;
+    if(data.visitorInfo) {
+        updateVisitorInfo(data.visitorInfo);
+    }
+    if(data.cfInfo) {
+        updateCfInfo(data.cfInfo);
+    }
 }
 s.onend=function(aborted){ //callback for test ended/aborted
     I("startStopBtn").className=""; //show start button again
@@ -74,6 +80,21 @@ function startStop(){ //start/stop button pressed
     }
 }
 
+function updateVisitorInfo(info) {
+    if(!info) return;
+    I("visitorIp").textContent = info.ip || 'N/A';
+    I("visitorAsn").textContent = info.asn ? 'AS' + info.asn : 'N/A';
+    I("visitorIsp").textContent = info.isp || 'N/A';
+    I("visitorCountry").textContent = info.country || 'N/A';
+    I("visitorRegion").textContent = [info.city, info.region].filter(Boolean).join(', ') || 'N/A';
+}
+
+function updateCfInfo(info) {
+    if(!info) return;
+    I("cfColo").textContent = info.colo || 'N/A';
+    I("cfLocation").textContent = [info.city, info.country].filter(Boolean).join(', ') || 'N/A';
+}
+
 //function to (re)initialize UI
 function initUI(){
     I("dlText").textContent="";
@@ -81,6 +102,13 @@ function initUI(){
     I("pingText").textContent="";
     I("jitText").textContent="";
     I("ip").textContent="";
+    I("visitorIp").textContent="";
+    I("visitorAsn").textContent="";
+    I("visitorIsp").textContent="";
+    I("visitorCountry").textContent="";
+    I("visitorRegion").textContent="";
+    I("cfColo").textContent="";
+    I("cfLocation").textContent="";
 }
 
 function I(id){return document.getElementById(id);}
@@ -203,6 +231,46 @@ function I(id){return document.getElementById(id);}
         }
     }
 
+    /* 新增访客信息和 CF 节点信息样式 */
+    #infoArea {
+        margin-top: 3em;
+        padding: 1em;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 2em;
+    }
+    .infoCard {
+        background: rgba(0, 0, 0, 0.2);
+        border: 1px solid rgba(96, 96, 255, 0.3);
+        border-radius: 8px;
+        padding: 1.2em;
+        min-width: 280px;
+        max-width: 400px;
+    }
+    .infoCard h3 {
+        margin: 0 0 0.8em 0;
+        font-size: 1.1em;
+        color: #6060FF;
+        border-bottom: 1px solid rgba(96, 96, 255, 0.3);
+        padding-bottom: 0.5em;
+    }
+    .infoRow {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 0.5em;
+        font-size: 0.9em;
+    }
+    .infoLabel {
+        color: #888;
+        font-weight: 500;
+    }
+    .infoValue {
+        color: #fff;
+        font-weight: 600;
+        text-align: right;
+    }
+
 </style>
 </head>
 <body>
@@ -236,6 +304,42 @@ function I(id){return document.getElementById(id);}
     </div>
     <div id="ipArea">
         IP Address: <span id="ip"></span>
+    </div>
+    <div id="infoArea">
+        <div class="infoCard">
+            <h3>🌐 Visitor Information</h3>
+            <div class="infoRow">
+                <span class="infoLabel">IP Address:</span>
+                <span class="infoValue" id="visitorIp"></span>
+            </div>
+            <div class="infoRow">
+                <span class="infoLabel">ISP:</span>
+                <span class="infoValue" id="visitorIsp"></span>
+            </div>
+            <div class="infoRow">
+                <span class="infoLabel">ASN:</span>
+                <span class="infoValue" id="visitorAsn"></span>
+            </div>
+            <div class="infoRow">
+                <span class="infoLabel">Country:</span>
+                <span class="infoValue" id="visitorCountry"></span>
+            </div>
+            <div class="infoRow">
+                <span class="infoLabel">Region:</span>
+                <span class="infoValue" id="visitorRegion"></span>
+            </div>
+        </div>
+        <div class="infoCard">
+            <h3>☁️ Cloudflare Node</h3>
+            <div class="infoRow">
+                <span class="infoLabel">Connected to:</span>
+                <span class="infoValue" id="cfColo"></span>
+            </div>
+            <div class="infoRow">
+                <span class="infoLabel">Location:</span>
+                <span class="infoValue" id="cfLocation"></span>
+            </div>
+        </div>
     </div>
 </div>
 <script type="text/javascript">

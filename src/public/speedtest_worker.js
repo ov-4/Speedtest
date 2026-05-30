@@ -12,6 +12,8 @@ var ulStatus = ""; // upload speed in megabit/s with 2 decimal digits
 var pingStatus = ""; // ping in milliseconds with 2 decimal digits
 var jitterStatus = ""; // jitter in milliseconds with 2 decimal digits
 var clientIp = ""; // client's IP address as reported by getIP.php
+var visitorInfo = null; // visitor's detailed information (ISP, ASN, location)
+var cfInfo = null; // Cloudflare node information
 var dlProgress = 0; //progress of download test 0-1
 var ulProgress = 0; //progress of upload test 0-1
 var pingProgress = 0; //progress of ping+jitter test 0-1
@@ -101,7 +103,9 @@ this.addEventListener("message", function(e) {
                 dlProgress: dlProgress,
                 ulProgress: ulProgress,
                 pingProgress: pingProgress,
-                testId: testId
+                testId: testId,
+                visitorInfo: visitorInfo,
+                cfInfo: cfInfo
             })
         );
     }
@@ -257,6 +261,8 @@ this.addEventListener("message", function(e) {
         pingStatus = "";
         jitterStatus = "";
         clientIp = "";
+        visitorInfo = null;
+        cfInfo = null;
         dlProgress = 0;
         ulProgress = 0;
         pingProgress = 0;
@@ -302,9 +308,18 @@ function getIp(done) {
             var data = JSON.parse(xhr.responseText);
             clientIp = data.processedString;
             ispInfo = data.rawIspInfo;
+            // 保存访客信息和 CF 节点信息
+            if (data.visitorInfo) {
+                visitorInfo = data.visitorInfo;
+            }
+            if (data.cfInfo) {
+                cfInfo = data.cfInfo;
+            }
         } catch (e) {
             clientIp = xhr.responseText;
             ispInfo = "";
+            visitorInfo = null;
+            cfInfo = null;
         }
         done();
     };
