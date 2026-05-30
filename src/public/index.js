@@ -307,7 +307,7 @@ function I(id){return document.getElementById(id);}
     </div>
     <div id="infoArea">
         <div class="infoCard">
-            <h3>🌐 Visitor Information</h3>
+            <h3>Client</h3>
             <div class="infoRow">
                 <span class="infoLabel">IP Address:</span>
                 <span class="infoValue" id="visitorIp"></span>
@@ -321,16 +321,16 @@ function I(id){return document.getElementById(id);}
                 <span class="infoValue" id="visitorAsn"></span>
             </div>
             <div class="infoRow">
-                <span class="infoLabel">Country:</span>
-                <span class="infoValue" id="visitorCountry"></span>
-            </div>
-            <div class="infoRow">
                 <span class="infoLabel">Region:</span>
                 <span class="infoValue" id="visitorRegion"></span>
             </div>
+            <div class="infoRow">
+                <span class="infoLabel">Country:</span>
+                <span class="infoValue" id="visitorCountry"></span>
+            </div>
         </div>
         <div class="infoCard">
-            <h3>☁️ Cloudflare Node</h3>
+            <h3>Server</h3>
             <div class="infoRow">
                 <span class="infoLabel">Connected to:</span>
                 <span class="infoValue" id="cfColo"></span>
